@@ -75,7 +75,29 @@ app.post('/recipes', jsonParser, (req, res) => {
 
 app.get('/recipes', (req, res) => {
   res.json(Recipes.get());
-})
+});
+
+// check for ID in route params
+function checkForId(id) {
+  if (!id) {
+    const message = 'Please provide an ID in the url.';
+    console.error(message);
+    res.status(400).send(message);
+  }
+}
+
+app.delete('/recipes/:id', (req, res) => {
+  checkForId(req.params.id);
+
+  try {
+    const deletedItem = Recipes.delete(req.params.id);
+    res.status(204).json(deletedItem);
+  }
+  catch(error) {
+    console.error(error.message);
+    res.status(400).json({message: error.message});
+  }
+});
 
 app.listen(process.env.PORT || 8080, () => {
   console.log(`Your app is listening on port ${process.env.PORT || 8080}`);

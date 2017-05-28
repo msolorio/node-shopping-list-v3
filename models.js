@@ -64,14 +64,24 @@ const Recipes = {
     this.items[item.id] = item;
     return item;
   },
+  
   get: function() {
     console.log('Retreiving recipes');
     return Object.keys(this.items).map(key => this.items[key]);
   },
+
   delete: function(itemId) {
+
+    if (!this.items[itemId]) {
+      throw new Error('ID does not exist in list of recipes.');
+    }
+
     console.log(`Deleting recipe with id \`${itemId}\``);
+    const item = this.items[itemId];
     delete this.items[itemId];
+    return item;
   },
+
   update: function(updatedItem) {
     console.log(`Updating recipe with id \`${updatedItem.id}\``);
     const {id} = updatedItem;
